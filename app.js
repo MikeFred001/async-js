@@ -2,16 +2,31 @@
 
 const NUMBERS_API_BASE_URL = "http://numbersapi.com";
 
-async function getNumFact(num){
+/** Fetches ten number facts from the numbers API. */
+async function getTenNumFacts(){
   const resp = await axios({
     method: "GET",
-    url: `${NUMBERS_API_BASE_URL}/${num}`,
+    url: `${NUMBERS_API_BASE_URL}/1..10?json`,
     responseType: 'json'
+
   });
   return resp.data;
 }
 
-async function getAllNumFacts(num){
+/** Fetches number fact data for a given number from the numbers api.
+ * Returns that data
+ */
+async function getNumFact(num){
+  const resp = await axios({
+    method: "GET",
+    url: `${NUMBERS_API_BASE_URL}/${num}?json`,
+    responseType: 'json'
+  });
+  return resp.data.text;
+}
+
+/** Returns 4 facts about a given number using numbers api */
+async function getFavNumFacts(num){
   const facts = [];
 
   for (let i = 0; i < 4; i++) {
@@ -21,14 +36,23 @@ async function getAllNumFacts(num){
   return facts;
 }
 
-async function displayOnPage(){
-  let numFacts = await getAllNumFacts(5);
+/** Loops through fact data from both requests and appends them to the DOM */
+async function displayFactsOnPage(){
+  let tenNumFacts = await getTenNumFacts();
 
-  console.log("number facts>>>>>", numFacts);
+  // console.log("number facts>>>>>", tenNumFacts);
 
-  for (let fact in numFacts) {
-    $('#number-facts').append($(`<p>${numFacts[fact]}</p>`));
+  for (let fact in tenNumFacts) {
+    $('#number-facts').append($(`<p>${tenNumFacts[fact]}</p>`));
+  }
+
+  let favNumFacts = await getFavNumFacts(5);
+
+  // console.log("number facts>>>>>", favNumFacts);
+
+  for (let fact in favNumFacts) {
+    $('#number-facts').append($(`<p>${favNumFacts[fact]}</p>`));
   }
 }
 
-displayOnPage();
+displayFactsOnPage();
