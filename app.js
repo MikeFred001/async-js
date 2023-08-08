@@ -27,20 +27,20 @@ async function getNumFact(num){
 
 /** Returns 4 facts about a given number using numbers api */
 async function getFavNumFacts(num){
-  const facts = [];
+  const factsPromises = [];
 
   for (let i = 0; i < 4; i++) {
-    facts.push(await getNumFact(num));
+    factsPromises.push(getNumFact(num));
   }
 
-  return facts;
+  return await Promise.allSettled(factsPromises);
 }
 
 /** Loops through fact data from both requests and appends them to the DOM */
 async function displayFactsOnPage(){
   let tenNumFacts = await getTenNumFacts();
 
-  // console.log("number facts>>>>>", tenNumFacts);
+  console.log("number facts>>>>>", tenNumFacts);
 
   for (let fact in tenNumFacts) {
     $('#number-facts').append($(`<p>${tenNumFacts[fact]}</p>`));
@@ -48,10 +48,10 @@ async function displayFactsOnPage(){
 
   let favNumFacts = await getFavNumFacts(5);
 
-  // console.log("number facts>>>>>", favNumFacts);
+  console.log("number facts>>>>>", favNumFacts);
 
   for (let fact in favNumFacts) {
-    $('#number-facts').append($(`<p>${favNumFacts[fact]}</p>`));
+    $('#number-facts').append($(`<p>${favNumFacts[fact].value}</p>`));
   }
 }
 
