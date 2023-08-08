@@ -17,6 +17,7 @@ async function fetchShuffledDeck() {
 
 async function main() {
   await fetchShuffledDeck();
+  $('#card-btn').on('click', drawOneCard);
 }
 
 
@@ -29,20 +30,24 @@ async function drawOneCard() {
   const cardImageURL = resp.data.cards[0].image;
 
   const card = $(`<img src=${cardImageURL} alt="Card"></img>`).addClass('card');
-  tiltCard(card);
+  shiftCard(card);
   $('#cards').append(card);
 }
 
 
-function tiltCard(card) {
-  const randomAngle = Math.floor(Math.random() * 90) + 300;
-  card.css({"transform": `rotate(${randomAngle}deg)`});
+function shiftCard(card) {
+  const randAngle = Math.floor(Math.random() * 90) + 300;
+  const randX = Math.floor(Math.random() * 80) - 40;
+  const randY = Math.floor(Math.random() * 80) - 40;
+  card.css({
+    "transform": `rotate(${randAngle}deg)
+                  translateX(${randX}px)
+                  translateX(${randY}px)`
+  });
 };
 
 
 main();
-
-$('#card-btn').on('click', drawOneCard);
 
 
 
