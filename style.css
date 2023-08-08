@@ -1,0 +1,25 @@
+body {
+  background-color: lightgreen;
+  color: blue;
+  height: 100vh;
+}
+
+.card {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  border-radius: 16px;
+  object-fit: cover;
+  border: solid 3.5px black;
+  /* box-shadow: 10px 10px 10px black inset; */
+}
+
+#board {
+  position: relative;
+  margin: 30px auto;
+}
+
+#card-btn {
+  margin: 30px;
+}

@@ -1,38 +1,48 @@
 "use strict";
 
-const CARDS_API_BASE_URL = "https://deckofcardsapi.com/";
+const CARDS_API_BASE_URL = "https://deckofcardsapi.com";
+
 let DECK_ID = null;
 
-async function shuffleCards() {
+async function fetchShuffledDeck() {
   const resp = await axios({
     method: "GET",
-    url: `${CARDS_API_BASE_URL}api/deck/new/shuffle/?deck_count=1`
+    url: `${CARDS_API_BASE_URL}/api/deck/new/shuffle/?deck_count=1`
   });
   console.log("response data", resp.data);
 
   DECK_ID = resp.data.deck_id;
-  return DECK_ID;
 }
+
 
 async function main() {
-  await shuffleCards();
-  const card = await drawOneCard(DECK_ID);
-
+  await fetchShuffledDeck();
 }
 
-main()
 
-
-async function drawOneCard(deckId) {
+async function drawOneCard() {
   const resp = await axios({
     method: "GET",
-    url: `${CARDS_API_BASE_URL}api/deck/${deckId}/draw/?count=1`
-
+    url: `${CARDS_API_BASE_URL}/api/deck/${DECK_ID}/draw/?count=1`
   });
-  console.log("response data", resp.data);
 
-  return resp.data.cards;
+  const cardImageURL = resp.data.cards[0].image;
+
+  const card = $(`<img src=${cardImageURL} alt="Card"></img>`).addClass('card');
+  tiltCard(card);
+  $('#cards').append(card);
 }
+
+
+function tiltCard(card) {
+  const randomAngle = Math.floor(Math.random() * 90) + 300;
+  card.css({"transform": `rotate(${randomAngle}deg)`});
+};
+
+
+main();
+
+$('#card-btn').on('click', drawOneCard);
 
 
 
